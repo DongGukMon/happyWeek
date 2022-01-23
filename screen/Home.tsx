@@ -1,5 +1,5 @@
 
-import React,{useEffect,useContext} from 'react';
+import React,{useEffect,useContext,useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -10,7 +10,8 @@ import {
   View,
   ImageBackground,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { StackContext } from '../utils/StackContext';
 
@@ -19,7 +20,9 @@ const screenHeight = Dimensions.get('screen').height;
 
 export default function Home({navigation}:any){
 
-  const {fullData,setFullData} = useContext(StackContext)
+  const {fullData,setSelectedData,thisVol} = useContext(StackContext)
+  
+
   return (
       <ImageBackground style={{flex:1}} source={require('../assets/backgroundImage.png')}>
         <SafeAreaView style={{flex:1}}>
@@ -35,13 +38,15 @@ export default function Home({navigation}:any){
             </View>
           }
           <View style={{...styles.subTextContainer, height:screenHeight*0.08}}>
-            <Text style={styles.subText}>1,000,000원으로아이폰을 사면 4주 동안만 행복합니다.</Text>
+            <Text style={styles.subText}>1,000,000원으로 아이폰을 사면 4주 동안만 행복합니다.</Text>
           </View>
 
           <View style={{...styles.container, height:screenHeight*0.49}}>
             <View style={{width:screenWidth*0.9, height:screenHeight*0.35, justifyContent:'space-between' }}>
-              <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>navigation.navigate('Details')}>
-                <Text style={styles.menuText}>1,001회차 결과보기</Text>
+              <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>{
+                fullData[thisVol] ? (setSelectedData(fullData[thisVol]),navigation.navigate('Details')):Alert.alert("최신 추첨 회차에 구매하신 내역이 없네요!")
+                }}>
+                <Text style={styles.menuText}>{thisVol}회차 결과보기</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>navigation.navigate('History')}>
                 <Text style={styles.menuText}>기록 보기</Text>

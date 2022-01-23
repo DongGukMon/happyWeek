@@ -2,14 +2,10 @@
 import React,{useContext, useEffect} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   ImageBackground,
-  Image,
   Dimensions,
   FlatList,
   TouchableOpacity
@@ -22,26 +18,76 @@ const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('scr
 
 export default function History({navigation}:any){
 
-  const {fullData,setSelectedData} = useContext(StackContext)
+  const {fullData,setSelectedData,thisVol} = useContext(StackContext)
+
   let orderedData:any=[]
-    Object.keys(fullData).sort().forEach(key=>{
+  Object.keys(fullData).sort().forEach(key=>{
     orderedData.push(fullData[key])
   })
 
+  const returnBallColor = (ball:any) =>{
+    let number =Number(ball)
+    switch(true){
+      case (number<11):
+        return "#F2C643";
+      case (number<21):
+        return "#81C6EE";
+      case (number<31):
+        return "#EE7A76";
+      case (number<41):
+        return "#AAAAAA";
+      default:
+        return "#B8D75B"; 
+  }}
+
+
+  const withoutWinningData = (volume:any) =>{
+    if(volume == Number(thisVol)+1){
+      return(
+      <View style={styles.container}>
+        <Text style={styles.withoutWinningStyle}>아직 추첨전입니다.</Text>
+      </View>
+      )
+    }else{
+      return(
+        <View style={styles.container}>
+        <Text style={styles.withoutWinningStyle}>터치하여 추첨 결과를 다시 받아보세요.</Text>
+      </View>
+    )}
+  }
+  
+  const setWinningColor = (grade:any)=>{
+    switch(grade){
+      case 5:
+        return '#AAAAAA';
+      case 4:
+        return '#F2C643';
+      case 3:
+        return '#EE7A76';
+      case 2:
+        return '#B8D75B';
+      case 2:
+        return '#81C6EE';
+      default:
+        return 'rgb(250,250,250)';
+    }
+  }
+ 
   const rend_item = (item:any,index:any)=>{
-    if(!item.item.volume){
+    if(!item.item.game){
       return
     }
     return(
-      <TouchableOpacity key={index} style={{...styles.itemContainer, height:screenHeight*0.15}} onPress={()=>{setSelectedData(item.item),navigation.navigate('Details')}}>
+      <TouchableOpacity key={index} style={{...styles.itemContainer, height:screenHeight*0.15,backgroundColor:item.item.grade ? setWinningColor(item.item.grade):'rgb(250,250,250)'}} 
+        onPress={()=>{setSelectedData(item.item),navigation.navigate('Details')}}>
         <View style={{justifyContent:'center'}}>
           <Text style={styles.lottoVolText}>{item.item.volume} 회</Text>
         </View>
         <View style={{...styles.winningContainer}}>
-          {item.item.winningNumber.map((winningNumber:any,index:any)=>{
+          {item.item.winningNumber ? item.item.winningNumber.map((winningNumber:any,index:any)=>{
             return(
               <View style={styles.ballContainer}>
-                <View style={{...styles.lottoBallStyle,width:screenWidth*0.1,height:screenWidth*0.1,marginHorizontal:screenWidth*0.005, backgroundColor:index > 3 ?'#B8D75B' : '#81C6EE'}}>
+                <View style={{...styles.lottoBallStyle,width:screenWidth*0.1,height:screenWidth*0.1,marginHorizontal:screenWidth*0.005, backgroundColor:returnBallColor(winningNumber)}}>
                   <Text style={styles.lottoNumber}>{winningNumber}</Text>
                 </View>
                 {index ==5 && <View style={{...styles.container, width:screenWidth*0.1,height:screenWidth*0.1}}>
@@ -49,7 +95,8 @@ export default function History({navigation}:any){
                 </View>}
               </View>
             )
-          })}
+          }):withoutWinningData(item.item.volume)
+        }
         </View>
       </TouchableOpacity>
     )
@@ -94,7 +141,6 @@ const styles = StyleSheet.create({
   },
   itemContainer:{
     justifyContent:'space-evenly',
-    backgroundColor:'rgb(250,250,250)',
     marginVertical:5,
     paddingVertical:5,
     borderRadius:15,
@@ -165,4 +211,10 @@ const styles = StyleSheet.create({
     },
     elevation:3
   },
+  withoutWinningStyle:{
+    textAlign:'center',
+    fontSize:18,
+    color:'rgb(70,70,70)',
+    fontWeight:'bold'
+  }
 });

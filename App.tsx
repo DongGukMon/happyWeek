@@ -8,8 +8,14 @@ import {
   Text,
   useColorScheme,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  LogBox
 } from 'react-native';
+
+LogBox.ignoreLogs([
+  "[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!",
+]);
+LogBox.ignoreAllLogs()
 
 import { NavigationContainer } from '@react-navigation/native';
 import Home from './screen/Home'
@@ -29,24 +35,27 @@ const App = () => {
 
   const [fullData, setFullData] = useState({total:0})
   const [selectedData, setSelectedData] = useState()
+  const [thisVol,setThisVol] = useState<any>()
+  const standardDate:any = new Date('2022-01-22T20:35:00')
  
-  useEffect(()=>{
+  const loadData = ()=>{
     AsyncStorage.getItem('lotto').then((result:any)=>{
       if(result != null){
         setFullData(JSON.parse(result))
       }
+      console.log(JSON.parse(result))
     })
-
-    async () =>{
-    let responseJSON = await fetch(`https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=1000`)
-    .then(res=>res.json())
-    console.log(responseJSON)
   }
 
+  useEffect(()=>{
+    loadData()
+
+    const addValue = Math.floor((Date.now()-standardDate)/604800000)
+    setThisVol(0+JSON.stringify(999+addValue))
   },[])
 
   return (
-    <StackContext.Provider value={{fullData,setFullData,selectedData,setSelectedData}}>
+    <StackContext.Provider value={{fullData,setFullData,selectedData,setSelectedData,thisVol,loadData}}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false , headerRight: ()=>{
