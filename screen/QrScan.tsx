@@ -25,7 +25,7 @@ import QRCodeScanner from 'react-native-qrcode-scanner';
 export default function QrScan({navigation}:any){
 
   const [isActivated,setIsActivated] = useState(true)
-  const {fullData,setFullData} = useContext(StackContext)
+  const {fullData,setFullData,loadData} = useContext(StackContext)
 
   const throwAlert = (text:string) =>{
     Alert.alert(
@@ -53,8 +53,8 @@ export default function QrScan({navigation}:any){
         volume:volume
       }
     }
-    setFullData(tempObject)
-    AsyncStorage.setItem('lotto',JSON.stringify(tempObject))
+    // setFullData(tempObject)
+    AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
     Alert.alert("등록 완료")
     navigation.goBack()
   }
@@ -71,8 +71,8 @@ export default function QrScan({navigation}:any){
           volume:volume,
         }
       }
-      setFullData(tempObject)
-      AsyncStorage.setItem('lotto',JSON.stringify(tempObject))
+      // setFullData(tempObject)
+      AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
       responseJSON ? Alert.alert("등록 완료!"):Alert.alert("서버로부터 당첨번호는 받아오지 못했습니다.")
       navigation.goBack()
       
@@ -87,8 +87,8 @@ export default function QrScan({navigation}:any){
             winningNumber:[responseJSON.drwtNo1,responseJSON.drwtNo2,responseJSON.drwtNo3,responseJSON.drwtNo4,responseJSON.drwtNo5,responseJSON.drwtNo6,responseJSON.bnusNo]
           }
         }
-        setFullData(tempObject)
-        AsyncStorage.setItem('lotto',JSON.stringify(tempObject))
+        // setFullData(tempObject)
+        AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
         Alert.alert("등록 완료")
         navigation.goBack()
         // console.log(tempObject)   

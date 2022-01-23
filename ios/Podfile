@@ -8,6 +8,8 @@ target 'HappyWeek' do
   #qr scanner 설정
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   config = use_native_modules!
 

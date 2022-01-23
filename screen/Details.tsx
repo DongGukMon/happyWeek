@@ -11,7 +11,9 @@ import {
   ImageBackground,
   Dimensions,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -21,11 +23,11 @@ import { StackContext } from '../utils/StackContext';
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('screen').height : 800;
 
-let higherScore = 6
-
 export default function Details(){
 
-  const {selectedData,thisVol,fullData,setSelectedData,loadData,setFullData} = useContext(StackContext)
+  const {selectedData,thisVol,fullData,setSelectedData,loadData, detailsModalVisible, setDetailsModalVisible} = useContext(StackContext)
+  
+  const colorGrade = ["#81C6EE",'#B8D75B','#EE7A76','#F2C643','#AAAAAA']
 
   const returnBallColor = (ball:any) =>{
     let number =Number(ball)
@@ -53,21 +55,16 @@ export default function Details(){
     })
     switch(count){
       case 3:
-        higherScore > 5 && (higherScore = 5)
         return '#AAAAAA';
       case 4:
-        higherScore > 4 && (higherScore = 4)
         return '#F2C643';
       case 5:
         if(my.includes(winning[6])){
-          higherScore > 2 && (higherScore = 2)
           return '#B8D75B';
         }else{
-          higherScore > 3 && (higherScore = 3)
           return '#EE7A76';
         }
       case 6:
-        higherScore = 1
         return '#81C6EE';
       default:
         return 'rgb(250,250,250)';
@@ -130,7 +127,15 @@ export default function Details(){
   }
 
   // useEffect(()=>{
-  //   setSelectedData({"dupleChecker": "1846335928", "game": [[1,3,9,14,18,28]], "volume": "0999", "winningNumber": [1, 3, 9, 14, 18, 28,25]})
+  //   AsyncStorage.setItem('lotto',JSON.stringify({
+  //     ...fullData,
+  //     [selectedData.volume]:{
+  //     "dupleChecker": "1846335928", 
+  //     "game": [[1, 3, 9, 14, 18, 28,25]],
+  //     "volume": "0999", 
+  //     "winningNumber": [1, 3, 9, 14, 18, 28,25]
+  //   }
+  // }), ()=>loadData())
   // },[])
 
   return (
@@ -170,6 +175,33 @@ export default function Details(){
       </View>
 
       <View style={{height:screenHeight*0.1, backgroundColor:'white'}}/>
+
+      <Modal visible={detailsModalVisible} transparent={true}>
+            <TouchableOpacity style={{...styles.container, flex:1, backgroundColor:'rgba(0,0,0,0.25)'}} onPress={()=>{setDetailsModalVisible(!detailsModalVisible)}}>
+              
+              <TouchableWithoutFeedback>
+                <View style={{height:screenHeight*0.5,width:screenWidth*0.8,backgroundColor:'white', borderRadius:15,overflow:'hidden'}}> 
+                  <View style={{justifyContent:'center', backgroundColor:"rgb(240,240,240)", height:screenHeight*0.1}}>
+                    <Text style={{fontSize:24,fontWeight:'bold',color:"black",paddingLeft:20}}>색상별 당첨 등수</Text>
+                  </View>
+                  <ScrollView>
+                    <View style={{justifyContent:'center', height:screenHeight*0.4}} onStartShouldSetResponder={() => true}>
+                      {colorGrade.map((item:any,index:any)=>{
+                        return <View style={{flexDirection:'row',alignItems:'center', paddingLeft:20, height:screenHeight*0.075}}>
+                            <View style={{width:screenHeight*0.05,height:screenHeight*0.05,backgroundColor:item,borderRadius:30}}/>
+                            <View style={{flex:1}}>
+                              <Text style={{fontSize:24,fontWeight:'bold',color:"black", textAlign:'center'}}>{index+1}등</Text>
+                            </View>
+                          </View>
+
+                      })}
+                    </View>
+                  </ScrollView>
+                </View>
+              </TouchableWithoutFeedback>
+          
+            </TouchableOpacity>
+          </Modal>
 
       </SafeAreaView>
     </ImageBackground>

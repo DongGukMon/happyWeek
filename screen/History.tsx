@@ -18,7 +18,7 @@ const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('scr
 
 export default function History({navigation}:any){
 
-  const {fullData,setSelectedData,thisVol} = useContext(StackContext)
+  const {fullData,setSelectedData,thisVol,winningData} = useContext(StackContext)
 
   let orderedData:any=[]
   Object.keys(fullData).sort().forEach(key=>{
@@ -40,6 +40,22 @@ export default function History({navigation}:any){
         return "#B8D75B"; 
   }}
 
+  const returnVolumeColor=(grade:any)=>{
+    switch(grade){
+      case 5:
+        return '#AAAAAA';
+      case 4:
+        return '#F2C643';
+      case 3:
+        return '#EE7A76';
+      case 2:
+        return '#B8D75B';
+      case 1:
+        return '#81C6EE';
+      default:
+        return 'rgb(250,250,250)';
+    }
+  }
 
   const withoutWinningData = (volume:any) =>{
     if(volume == Number(thisVol)+1){
@@ -55,30 +71,14 @@ export default function History({navigation}:any){
       </View>
     )}
   }
-  
-  const setWinningColor = (grade:any)=>{
-    switch(grade){
-      case 5:
-        return '#AAAAAA';
-      case 4:
-        return '#F2C643';
-      case 3:
-        return '#EE7A76';
-      case 2:
-        return '#B8D75B';
-      case 2:
-        return '#81C6EE';
-      default:
-        return 'rgb(250,250,250)';
-    }
-  }
- 
+
+
   const rend_item = (item:any,index:any)=>{
     if(!item.item.game){
       return
     }
     return(
-      <TouchableOpacity key={index} style={{...styles.itemContainer, height:screenHeight*0.15,backgroundColor:item.item.grade ? setWinningColor(item.item.grade):'rgb(250,250,250)'}} 
+      <TouchableOpacity key={index} style={{...styles.itemContainer, height:screenHeight*0.15, backgroundColor: winningData[item.item.volume] ? returnVolumeColor(winningData[item.item.volume]) : 'rgb(250,250,250)'}} 
         onPress={()=>{setSelectedData(item.item),navigation.navigate('Details')}}>
         <View style={{justifyContent:'center'}}>
           <Text style={styles.lottoVolText}>{item.item.volume} 회</Text>
@@ -102,7 +102,10 @@ export default function History({navigation}:any){
     )
   }
   
- 
+ useEffect(()=>{
+   console.log(winningData)
+ },[])
+
   return (
     <ImageBackground style={{flex:1}} source={require('../assets/backgroundImage.png')}>
       <SafeAreaView style={{flex:1}}>
