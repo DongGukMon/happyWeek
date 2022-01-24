@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1055098067222",
+    "project_id": "happyweek-5cc30",
+    "storage_bucket": "happyweek-5cc30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055098067222:android:f39f99b708263923c99837",
+        "android_client_info": {
+          "package_name": "com.happyweek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055098067222-c2l2950vcag03faqabqcvjg4foeb8rhq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5_JwZk4z5m4wW9gfa5tTQWzaLZp5mFI4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055098067222-c2l2950vcag03faqabqcvjg4foeb8rhq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

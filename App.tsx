@@ -10,7 +10,8 @@ import {
   View,
   TouchableOpacity,
   LogBox,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 
 LogBox.ignoreLogs([
@@ -44,6 +45,16 @@ PushNotification.createChannel(
   (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
 );
 
+PushNotification.configure({
+   permissions: {
+       alert: true,
+       badge: true,
+       sound: true,
+   },
+   popInitialNotification: true,
+   requestPermissions: true,
+});
+
 const App = () => {
 
   const [fullData, setFullData] = useState({total:0})
@@ -54,9 +65,10 @@ const App = () => {
   const [homeModalVisible,setHomeModalVisible] = useState<any>(false)
   const [detailsModalVisible,setDetailsModalVisible] = useState<any>(false)
 
-  const [buttonIcon,setButtonIcon] = useState<any>(true)
+  const [allowNotification,setAllowNotification] = useState(true)
 
-  const standardDate:any = new Date('2022-01-22T20:35:00')
+  const standardDate:any = new Date('2022-01-22T20:40:00')
+  const addValue = Math.floor((Date.now()-standardDate)/604800000)
  
   const isWinning = (winning:any,my:any) =>{
     let count = 0
@@ -125,22 +137,59 @@ const App = () => {
     })
   }
 
-  useEffect(()=>{
-    loadData()
-
-    const addValue = Math.floor((Date.now()-standardDate)/604800000)
-    setThisVol(0+JSON.stringify(999+addValue))
-
+  const weeklyNotification = ()=>{
+    let tempDate = standardDate
     PushNotification.localNotificationSchedule({
+    
       //... You can use all the options from localNotifications
       message: "My Notification Message", // (required)
       title:"hi",
       channelId:"channel-id",
-      date: new Date(Date.now()+5*1000)
+      allowWhileIdle:true,
+      
+      // 아직 오지않은 토요일 추첨시간
+      date: new Date(tempDate.setDate(tempDate.getDate()+(addValue+1)*7))
+      // date: new Date(Date.now()+20*1000)
       
       /* Android Only Properties */
     
     });
+  }
+
+  const cancelNotification=()=>{
+    Alert.alert("알람을 켜놓으면 매주 토요일 추첨 이후 알림을 보내드립니다.")
+    PushNotification.cancelAllLocalNotifications()
+  }
+
+  const restartNotification=()=>{
+    PushNotification.getScheduledLocalNotifications((item:any)=>{
+      //현재 실행중인 알림이 없으면 알림 재시작
+      item.length == 0 && weeklyNotification()
+    })
+  }
+
+  useEffect(()=>{
+
+    loadData()
+    
+    setThisVol(0+JSON.stringify(999+addValue))
+
+    //notification 활성화 여부 판단
+    AsyncStorage.getItem('notification').then((notificationState:any)=>{
+      //최초 실행일 경우
+      if (notificationState == null) {
+        //true로 초기값 설정 후 푸시 예약 걸어놓기
+        AsyncStorage.setItem('notification',JSON.stringify(true)).then(()=>{
+          weeklyNotification()
+        })
+        //최초 실행이 아닐경우
+      } else{ 
+        //true일 때 현재 진행중인 push가 없으면 푸시 재실행 (문제점. 사용자가 앱을 안키면 재등록을 할수가 없다. 일주일에 한번은 접속하셔야할텐데)
+        //false일 때 아이콘을 outline으로 바꾼다.
+        JSON.parse(notificationState) ? restartNotification(): setAllowNotification(false)
+      }
+    })
+
   },[])
 
   return (
@@ -149,8 +198,16 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false , headerRight: ()=>{
             return <View style={styles.headerTwoButton}>
-                <TouchableOpacity  onPress={()=>{buttonIcon && Alert.alert("알람을 켜놓으면 매주 토요일 추첨 이후 알림을 보내드립니다."),setButtonIcon(!buttonIcon)}}>
-                    {buttonIcon ?<Icon name="bell-ring" size={27} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
+                <TouchableOpacity  onPress={()=>{
+                  //알람을 끌때는 등록해놓은 푸시 삭제, 알람을 켤때는 푸시 활성화
+                  allowNotification ? cancelNotification() : weeklyNotification(),
+                  //스토리지에 현재 상태 입력
+                  AsyncStorage.setItem('notification',JSON.stringify(!allowNotification))
+                  //알림 설정 상태에 맞춰 아이콘 모양 변경
+                  setAllowNotification(!allowNotification)
+                  }}>
+                  
+                  {allowNotification ?<Icon name="bell-ring" size={27} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>setHomeModalVisible(true)}>
                     <Icon name="alert-circle-outline" size={30} color="black" />

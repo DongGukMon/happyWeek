@@ -142,7 +142,8 @@ const styles = StyleSheet.create({
     fontSize:28,
     fontWeight:'bold',
     paddingLeft:20,
-    letterSpacing:1
+    letterSpacing:1,
+    color:"black"
   },
   subText:{
     color:'white',
@@ -166,11 +167,13 @@ const styles = StyleSheet.create({
     fontSize:20,
     fontWeight:'bold',
     textAlign:'center',
+    color:"black"
   },
   menuText:{
     fontSize:32,
     fontWeight:'bold',
-    textAlign:'center'
+    textAlign:'center',
+    color:"black"
   },
   menuContainer:{
     borderRadius:15,

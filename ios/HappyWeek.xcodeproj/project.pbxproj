@@ -36,6 +36,8 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = HappyWeek/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = HappyWeek/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = HappyWeek/main.m; sourceTree = "<group>"; };
+		154C0CD5279E52AA0075AAEB /* HappyWeekRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HappyWeekRelease.entitlements; path = HappyWeek/HappyWeekRelease.entitlements; sourceTree = "<group>"; };
+		154C0CD6279E52CD0075AAEB /* HappyWeek.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HappyWeek.entitlements; path = HappyWeek/HappyWeek.entitlements; sourceTree = "<group>"; };
 		1D0AE47A65C8663E3B452821 /* Pods-HappyWeek-HappyWeekTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HappyWeek-HappyWeekTests.release.xcconfig"; path = "Target Support Files/Pods-HappyWeek-HappyWeekTests/Pods-HappyWeek-HappyWeekTests.release.xcconfig"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-HappyWeek.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HappyWeek.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-HappyWeek-HappyWeekTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HappyWeek-HappyWeekTests.debug.xcconfig"; path = "Target Support Files/Pods-HappyWeek-HappyWeekTests/Pods-HappyWeek-HappyWeekTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +88,8 @@
 		13B07FAE1A68108700A75B9A /* HappyWeek */ = {
 			isa = PBXGroup;
 			children = (
+				154C0CD6279E52CD0075AAEB /* HappyWeek.entitlements */,
+				154C0CD5279E52AA0075AAEB /* HappyWeekRelease.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -483,6 +487,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HappyWeek/HappyWeek.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7P6594JX3Y;
 				ENABLE_BITCODE = NO;
@@ -510,6 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HappyWeek/HappyWeekRelease.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7P6594JX3Y;
 				INFOPLIST_FILE = HappyWeek/Info.plist;
