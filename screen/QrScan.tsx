@@ -42,7 +42,7 @@ export default function QrScan({navigation}:any){
 
   const notDuple = (volume:string,game:string,total:number,dupleChecker:string) => {
     let tempGame = fullData[volume]['game'].concat(game)
-    let tempDupleChecker = fullData['dupleChecker'].concat(dupleChecker)
+    let tempDupleChecker = fullData[volume]['dupleChecker'].concat(dupleChecker)
     let tempObject = {
       ...fullData,
       total:Number(fullData['total']) + total,
@@ -67,7 +67,7 @@ export default function QrScan({navigation}:any){
         total:Number(fullData['total']) + total,
         [volume]:{
           game:game,
-          dupleChecker:dupleChecker,
+          dupleChecker:[dupleChecker],
           volume:volume,
         }
       }
@@ -82,7 +82,7 @@ export default function QrScan({navigation}:any){
           total:Number(fullData['total']) + total,
           [volume]:{
             game:game,
-            dupleChecker:dupleChecker,
+            dupleChecker:[dupleChecker],
             volume:volume,
             winningNumber:[responseJSON.drwtNo1,responseJSON.drwtNo2,responseJSON.drwtNo3,responseJSON.drwtNo4,responseJSON.drwtNo5,responseJSON.drwtNo6,responseJSON.bnusNo]
           }

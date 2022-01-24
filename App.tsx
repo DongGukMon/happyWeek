@@ -31,7 +31,18 @@ import {StackContext} from './utils/StackContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
+import PushNotification from "react-native-push-notification";
+
 const Stack = createStackNavigator();
+
+PushNotification.createChannel(
+  {
+    channelId: "channel-id", // (required)
+    channelName: "My channel", // (required)
+   
+  },
+  (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+);
 
 const App = () => {
 
@@ -119,6 +130,17 @@ const App = () => {
 
     const addValue = Math.floor((Date.now()-standardDate)/604800000)
     setThisVol(0+JSON.stringify(999+addValue))
+
+    PushNotification.localNotificationSchedule({
+      //... You can use all the options from localNotifications
+      message: "My Notification Message", // (required)
+      title:"hi",
+      channelId:"channel-id",
+      date: new Date(Date.now()+5*1000)
+      
+      /* Android Only Properties */
+    
+    });
   },[])
 
   return (
@@ -128,7 +150,7 @@ const App = () => {
           <Stack.Screen name="Home" component={Home} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false , headerRight: ()=>{
             return <View style={styles.headerTwoButton}>
                 <TouchableOpacity  onPress={()=>{buttonIcon && Alert.alert("알람을 켜놓으면 매주 토요일 추첨 이후 알림을 보내드립니다."),setButtonIcon(!buttonIcon)}}>
-                    {buttonIcon ?<Icon name="bell-ring" size={30} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
+                    {buttonIcon ?<Icon name="bell-ring" size={27} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=>setHomeModalVisible(true)}>
                     <Icon name="alert-circle-outline" size={30} color="black" />
@@ -146,7 +168,7 @@ const App = () => {
                     <Icon name="help-circle-outline" size={30} color="black" />
                 </TouchableOpacity>
             }}} />
-          <Stack.Screen name="QrScan" component={QrScan} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false}} />
+          <Stack.Screen name="QrScan" component={QrScan} options={{headerTintColor:'#B8D75B', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false}} />
           
       </Stack.Navigator>
       </NavigationContainer>

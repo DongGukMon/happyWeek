@@ -8,17 +8,19 @@ import {
   ImageBackground,
   Dimensions,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 
 import { StackContext } from '../utils/StackContext';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('screen').height : 800;
 
 export default function History({navigation}:any){
 
-  const {fullData,setSelectedData,thisVol,winningData} = useContext(StackContext)
+  const {fullData,setSelectedData,thisVol,winningData,loadData} = useContext(StackContext)
 
   let orderedData:any=[]
   Object.keys(fullData).sort().forEach(key=>{
@@ -102,9 +104,6 @@ export default function History({navigation}:any){
     )
   }
   
- useEffect(()=>{
-   console.log(winningData)
- },[])
 
   return (
     <ImageBackground style={{flex:1}} source={require('../assets/backgroundImage.png')}>
@@ -115,7 +114,7 @@ export default function History({navigation}:any){
         <Text style={styles.historyTitle}>나의 행복 기록</Text>
       </View>
 
-        <View style={{height: screenHeight*0.73}}>
+        <View style={{height:screenHeight*0.86}}>
           <FlatList
           data={orderedData.reverse()}
           renderItem={rend_item}
@@ -124,7 +123,7 @@ export default function History({navigation}:any){
           />
         </View>
 
-      <View style={{height: screenHeight*0.075, backgroundColor:'white'}}/>
+      {/* <View style={{height: Platform.OS ==='android' ? 0: screenHeight*0.075, backgroundColor:'white'}}/> */}
 
       </SafeAreaView>
     </ImageBackground>

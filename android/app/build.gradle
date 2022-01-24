@@ -135,13 +135,12 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.0",
+        versionName "1.0"
         
         // qr sanner 설정
         missingDimensionStrategy 'react-native-camera', 'general'
         missingDimensionStrategy 'react-native-camera', 'mlkit'
-        // multiDex 에러를 위해 미리 추가해두는 것이 좋음
-        multiDexEnabled true
+        
     }
     splits {
         abi {

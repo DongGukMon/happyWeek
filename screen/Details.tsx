@@ -13,7 +13,8 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Platform
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -126,18 +127,6 @@ export default function Details(){
     </View>)
   }
 
-  // useEffect(()=>{
-  //   AsyncStorage.setItem('lotto',JSON.stringify({
-  //     ...fullData,
-  //     [selectedData.volume]:{
-  //     "dupleChecker": "1846335928", 
-  //     "game": [[1, 3, 9, 14, 18, 28,25]],
-  //     "volume": "0999", 
-  //     "winningNumber": [1, 3, 9, 14, 18, 28,25]
-  //   }
-  // }), ()=>loadData())
-  // },[])
-
   return (
     <ImageBackground style={{flex:1}} source={require('../assets/backgroundImage.png')}>
       <SafeAreaView style={{flex:1}}>
@@ -164,7 +153,7 @@ export default function Details(){
       }
       </View>
 
-      <View style={{...styles.myContainer, height: screenHeight*0.6, marginTop: screenHeight*0.05}}>
+      <View style={{...styles.myContainer, height:screenHeight*0.78, marginTop: screenHeight*0.05}}>
         <FlatList
          data={selectedData.game}
          // data={testArr}
@@ -174,7 +163,7 @@ export default function Details(){
          />
       </View>
 
-      <View style={{height:screenHeight*0.1, backgroundColor:'white'}}/>
+      {/* <View style={{height:Platform.OS ==='android'? 0 : screenHeight*0.1, backgroundColor:'white'}}/> */}
 
       <Modal visible={detailsModalVisible} transparent={true}>
             <TouchableOpacity style={{...styles.container, flex:1, backgroundColor:'rgba(0,0,0,0.25)'}} onPress={()=>{setDetailsModalVisible(!detailsModalVisible)}}>

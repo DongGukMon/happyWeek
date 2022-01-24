@@ -11,7 +11,8 @@ import {
   Alert,
   Modal,
   TouchableWithoutFeedback,
-  ScrollView
+  ScrollView,
+  Platform
 } from 'react-native';
 import { StackContext } from '../utils/StackContext';
 
@@ -71,7 +72,7 @@ export default function Home({navigation}:any){
             <Text style={styles.subText}>{returnSubText(Number(fullData.total)*1000)}</Text>
           </View>
 
-          <View style={{...styles.container, height:screenHeight*0.49}}>
+          <View style={{...styles.container, height:Platform.OS ==='android'? screenHeight*0.47 : screenHeight*0.49}}>
             <View style={{width:screenWidth*0.9, height:screenHeight*0.35, justifyContent:'space-between' }}>
               <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>{
                 fullData[thisVol] ? (setSelectedData(fullData[thisVol]),navigation.navigate('Details')):Alert.alert("최신 추첨 회차에 구매하신 내역이 없네요!")
@@ -107,7 +108,7 @@ export default function Home({navigation}:any){
                   <ScrollView>
                     <View style={{padding:20}} onStartShouldSetResponder={() => true}>
                       <Text style={{fontSize:16}}>
-                        {"<"}happy week{">"}는 당첨 여부를 쉽게 확인하고 복권 구매 이력을 한곳에 기록하고자 하는 목적으로 제작되었습니다. 
+                        {"<"}HappyWeek{">"}는 당첨 여부를 쉽게 확인하고 복권 구매 이력을 한곳에 기록하고자 하는 목적으로 제작되었습니다. 
                       </Text>
                       <Text/>
                       <Text style={{fontSize:16}}>
@@ -115,7 +116,7 @@ export default function Home({navigation}:any){
                       </Text>
                       <Text/>
                       <Text style={{fontSize:16}}>
-                        {"<"}happy week{">"}에서 확인한 당첨 여부는 실제 당첨 여부에 어떠한 근거로도 활용될 수 없으며, 앱의 사용으로 일어나는 어떠한 문제에도
+                        {"<"}HappyWeek{">"}에서 확인한 당첨 여부는 실제 당첨 여부에 어떠한 근거로도 활용될 수 없으며, 앱의 사용으로 일어나는 어떠한 문제에도
                         책임이 없음을 알려드립니다.
                       </Text>
                     </View>
