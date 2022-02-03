@@ -34,6 +34,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import PushNotification from "react-native-push-notification";
 
+import SplashScreen from 'react-native-splash-screen'
+
+import { ToastProvider } from 'react-native-toast-notifications'
+
 const Stack = createStackNavigator();
 
 PushNotification.createChannel(
@@ -67,13 +71,14 @@ const App = () => {
 
   const [allowNotification,setAllowNotification] = useState(true)
 
-  const standardDate:any = new Date('2022-01-22T20:40:00')
+  const standardDate:any = new Date('2022-01-29T20:50:00')
   const addValue = Math.floor((Date.now()-standardDate)/604800000)
  
   const isWinning = (winning:any,my:any) =>{
+    let myToNumber = my.map(Number)
     let count = 0
     let main = winning.slice(0,6)
-    my.map((item:any)=>{
+    myToNumber.map((item:any)=>{
       if(main.includes(item)){
         count = count + 1
       }
@@ -84,7 +89,7 @@ const App = () => {
       case 4:
         return 4;
       case 5:
-        if(my.includes(winning[6])){
+        if(myToNumber.includes(winning[6])){
           return 2;
         }else{
           return 3;
@@ -107,7 +112,7 @@ const App = () => {
         },
         {
           text: "예",
-          onPress: () => {AsyncStorage.clear(),setFullData({total:0})},
+          onPress: () => {AsyncStorage.removeItem('lotto'),setFullData({total:0})},
         }
       ]
     );
@@ -142,8 +147,10 @@ const App = () => {
     PushNotification.localNotificationSchedule({
     
       //... You can use all the options from localNotifications
-      message: "My Notification Message", // (required)
-      title:"hi",
+      title:"번호 맞춰보러 가시죠!",
+      message: "상금은 어디에 쓸지 생각해보셨나요?",
+      color:"#81C6EE",
+      largeIcon:"",
       channelId:"channel-id",
       allowWhileIdle:true,
       
@@ -172,7 +179,10 @@ const App = () => {
 
     loadData()
     
-    setThisVol(0+JSON.stringify(999+addValue))
+    setThisVol(JSON.stringify(1000+addValue))
+
+    //스플래시 숨기기
+    setTimeout(() => { SplashScreen.hide(); }, 1500)
 
     //notification 활성화 여부 판단
     AsyncStorage.getItem('notification').then((notificationState:any)=>{
@@ -193,43 +203,45 @@ const App = () => {
   },[])
 
   return (
-    <StackContext.Provider value={{fullData,setFullData,selectedData,setSelectedData,thisVol,loadData,winningData,homeModalVisible,setHomeModalVisible,detailsModalVisible,setDetailsModalVisible}}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false , headerRight: ()=>{
-            return <View style={styles.headerTwoButton}>
-                <TouchableOpacity  onPress={()=>{
-                  //알람을 끌때는 등록해놓은 푸시 삭제, 알람을 켤때는 푸시 활성화
-                  allowNotification ? cancelNotification() : weeklyNotification(),
-                  //스토리지에 현재 상태 입력
-                  AsyncStorage.setItem('notification',JSON.stringify(!allowNotification))
-                  //알림 설정 상태에 맞춰 아이콘 모양 변경
-                  setAllowNotification(!allowNotification)
-                  }}>
-                  
-                  {allowNotification ?<Icon name="bell-ring" size={27} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>setHomeModalVisible(true)}>
-                    <Icon name="alert-circle-outline" size={30} color="black" />
-                </TouchableOpacity>
-              </View>
-            }
-          }}/>
-          <Stack.Screen name="History" component={History} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false, headerRight: ()=>{
-            return <TouchableOpacity style={styles.headerButton} onPress={()=>{throwAlert()}}>
-                    <Icon name="delete-empty-outline" size={30} color="black" />
-                </TouchableOpacity>
-            }}} />
-          <Stack.Screen name="Details" component={Details} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false, headerRight: ()=>{
-            return <TouchableOpacity style={styles.headerButton} onPress={()=>{setDetailsModalVisible(true)}}>
-                    <Icon name="help-circle-outline" size={30} color="black" />
-                </TouchableOpacity>
-            }}} />
-          <Stack.Screen name="QrScan" component={QrScan} options={{headerTintColor:'#B8D75B', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false}} />
-          
-      </Stack.Navigator>
-      </NavigationContainer>
-    </StackContext.Provider>
+    <ToastProvider offsetBottom={40} successColor="#81C6EE">
+      <StackContext.Provider value={{fullData,setFullData,selectedData,setSelectedData,thisVol,loadData,winningData,homeModalVisible,setHomeModalVisible,detailsModalVisible,setDetailsModalVisible}}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false , headerRight: ()=>{
+              return <View style={styles.headerTwoButton}>
+                  <TouchableOpacity  onPress={()=>{
+                    //알람을 끌때는 등록해놓은 푸시 삭제, 알람을 켤때는 푸시 활성화
+                    allowNotification ? cancelNotification() : weeklyNotification(),
+                    //스토리지에 현재 상태 입력
+                    AsyncStorage.setItem('notification',JSON.stringify(!allowNotification))
+                    //알림 설정 상태에 맞춰 아이콘 모양 변경
+                    setAllowNotification(!allowNotification)
+                    }}>
+                    
+                    {allowNotification ?<Icon name="bell-ring" size={27} color="black" />:<Icon name="bell-outline" size={30} color="black" />}
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={()=>setHomeModalVisible(true)}>
+                      <Icon name="alert-circle-outline" size={30} color="black" />
+                  </TouchableOpacity>
+                </View>
+              }
+            }}/>
+            <Stack.Screen name="History" component={History} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false, headerRight: ()=>{
+              return <TouchableOpacity style={styles.headerButton} onPress={()=>{throwAlert()}}>
+                      <Icon name="delete-empty-outline" size={30} color="black" />
+                  </TouchableOpacity>
+              }}} />
+            <Stack.Screen name="Details" component={Details} options={{headerTintColor:'black', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false, headerRight: ()=>{
+              return <TouchableOpacity style={styles.headerButton} onPress={()=>{setDetailsModalVisible(true)}}>
+                      <Icon name="help-circle-outline" size={30} color="black" />
+                  </TouchableOpacity>
+              }}} />
+            <Stack.Screen name="QrScan" component={QrScan} options={{headerTintColor:'#B8D75B', title:"", headerTransparent:true, headerStyle:{}, headerBackTitleVisible:false}} />
+            
+        </Stack.Navigator>
+        </NavigationContainer>
+      </StackContext.Provider>
+    </ToastProvider>
   );
 };
 

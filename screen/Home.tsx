@@ -77,7 +77,7 @@ export default function Home({navigation}:any){
               <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>{
                 fullData[thisVol] ? (setSelectedData(fullData[thisVol]),navigation.navigate('Details')):Alert.alert("최신 추첨 회차에 구매하신 내역이 없네요!")
                 }}>
-                <Text style={styles.menuText}>{thisVol}회차 결과보기</Text>
+                <Text style={styles.menuText}>{Number(thisVol)} 회차 결과보기</Text>
               </TouchableOpacity>
               <TouchableOpacity style={{...styles.menuContainer,height:screenHeight*0.16}} onPress={()=>navigation.navigate('History')}>
                 <Text style={styles.menuText}>기록 보기</Text>
@@ -107,16 +107,20 @@ export default function Home({navigation}:any){
                   </View>
                   <ScrollView>
                     <View style={{padding:20}} onStartShouldSetResponder={() => true}>
-                      <Text style={{fontSize:16}}>
-                        {"<"}HappyWeek{">"}는 당첨 여부를 쉽게 확인하고 복권 구매 이력을 한곳에 기록하고자 하는 목적으로 제작되었습니다. 
+                      <Text style={{fontSize:18,color:'black'}}>
+                        {"<"}행복을 사다{">"}는 당첨 여부를 쉽게 확인하고 복권 구매 이력을 한곳에 기록하는데 도움을 주는 서비스입니다. 
                       </Text>
                       <Text/>
                       <Text style={{fontSize:16}}>
-                        기기의 오작동 등 변수로인해, 항상 100% 일치하는 결과를 보장할 수는 없습니다. 따라서 중요한 시점에는 직접 확인하시거나 다른 방법과 중복하여 확인하는 것을 추천드립니다.
+                        -알림 및 회차 최신화는 토요일 오후 8시 50분을 기준으로 합니다.
                       </Text>
                       <Text/>
                       <Text style={{fontSize:16}}>
-                        {"<"}HappyWeek{">"}에서 확인한 당첨 여부는 실제 당첨 여부에 어떠한 근거로도 활용될 수 없으며, 앱의 사용으로 일어나는 어떠한 문제에도
+                        -상황에 따라 예상치 못한 변수가 발생할수 있으니, 결과를 무조건적으로 신뢰하기 보다 중요한 시점에는 직접 확인하시거나 다른 방법과 중복하여 확인하는 것을 추천드립니다.
+                      </Text>
+                      <Text/>
+                      <Text style={{fontSize:16}}>
+                        -{"<"}행복을 사다{">"}에서 확인한 당첨 여부는 실제 당첨 여부에 어떠한 근거로도 활용될 수 없으며, 앱의 사용으로 일어나는 어떠한 문제에도
                         책임이 없음을 알려드립니다.
                       </Text>
                     </View>

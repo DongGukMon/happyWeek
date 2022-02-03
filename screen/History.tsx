@@ -9,11 +9,13 @@ import {
   Dimensions,
   FlatList,
   TouchableOpacity,
-  Platform
+  Platform,
+  StatusBar
 } from 'react-native';
 
 import { StackContext } from '../utils/StackContext';
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('screen').height : 800;
@@ -103,6 +105,18 @@ export default function History({navigation}:any){
       </TouchableOpacity>
     )
   }
+
+  // useEffect(()=>{
+  //   AsyncStorage.setItem('lotto',JSON.stringify({
+  //     '0999':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27],[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27],[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0999", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0998':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0998", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0997':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0997", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0996':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 34], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0996", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0995':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0995", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0994':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0994", "winningNumber": [1, 3, 9, 14, 18, 28, 34]},
+  //     '0993':{"dupleChecker": ["1846335928"], "game": [[1, 3, 9, 14, 18, 28], [1, 3, 9, 14, 18, 34], [1, 3, 9, 14, 16, 27], [1, 3, 9, 15, 17, 34], ["04", "05", "21", "34", "37", "44"]], "volume": "0993", "winningNumber": [1, 3, 9, 14, 18, 28, 34]}
+  //   }),()=>loadData())
+  // },[])
   
 
   return (
@@ -114,12 +128,12 @@ export default function History({navigation}:any){
         <Text style={styles.historyTitle}>나의 행복 기록</Text>
       </View>
 
-        <View style={{height:screenHeight*0.86}}>
+        <View style={{flex:(Platform.OS==='android' || screenHeight == 800) ? 1 :0,height:Dimensions.get('screen').height * 0.86 - getStatusBarHeight()}}>
           <FlatList
           data={orderedData.reverse()}
           renderItem={rend_item}
           //  keyExtractor={(index:any) => index}
-          contentContainerStyle={{paddingHorizontal:15, paddingVertical:10}}
+          contentContainerStyle={{paddingHorizontal:15, paddingVertical:20}}
           />
         </View>
 
@@ -173,7 +187,7 @@ const styles = StyleSheet.create({
     justifyContent:'center',
   },
   lottoBallStyle:{
-    borderRadius:30, 
+    borderRadius:100, 
     justifyContent:'center', 
     alignItems:'center',
     shadowColor: "rgb(50, 50, 50)",

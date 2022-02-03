@@ -14,18 +14,29 @@ import {
 } from 'react-native';
 
 import { StackContext } from '../utils/StackContext';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screenHeight=Dimensions.get('screen').height
 const screenWidth=Dimensions.get('screen').width
 
 import QRCodeScanner from 'react-native-qrcode-scanner';
+import { useToast } from "react-native-toast-notifications";
 
 export default function QrScan({navigation}:any){
 
   const [isActivated,setIsActivated] = useState(true)
   const {fullData,setFullData,loadData} = useContext(StackContext)
+
+  const toast = useToast();
+
+  const throwToast =()=>{
+    toast.show("등록 완료!", {
+      type: "success",
+      placement: "bottom",
+      duration: 2000,
+      animationType: "zoom-in",
+    });
+  }
 
   const throwAlert = (text:string) =>{
     Alert.alert(
@@ -41,6 +52,7 @@ export default function QrScan({navigation}:any){
   }
 
   const notDuple = (volume:string,game:string,total:number,dupleChecker:string) => {
+
     let tempGame = fullData[volume]['game'].concat(game)
     let tempDupleChecker = fullData[volume]['dupleChecker'].concat(dupleChecker)
     let tempObject = {
@@ -55,13 +67,29 @@ export default function QrScan({navigation}:any){
     }
     // setFullData(tempObject)
     AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
-    Alert.alert("등록 완료")
+    throwToast()
     navigation.goBack()
   }
 
   const firstSet = async(volume:string,game:string,total:number,dupleChecker:string) =>{
-    let responseJSON = await fetch(`https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${volume}`).then(res=>res.json())
-    if(responseJSON.returnValue !="success"){
+    
+ let responseJSON = await fetch(`https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=${volume}`).then(res=>res.json())
+  .catch(e=>{let tempObject = {
+    ...fullData,
+    total:Number(fullData['total']) + total,
+    [volume]:{
+      game:game,
+      dupleChecker:[dupleChecker],
+      volume:volume,
+    }
+  }
+  
+  AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
+  responseJSON ? throwToast():Alert.alert("서버로부터 당첨번호는 받아오지 못했습니다.")
+  navigation.goBack()
+})
+    
+    if(responseJSON.returnValue =="fail"){
       let tempObject = {
         ...fullData,
         total:Number(fullData['total']) + total,
@@ -71,9 +99,10 @@ export default function QrScan({navigation}:any){
           volume:volume,
         }
       }
-      // setFullData(tempObject)
+      
+      
       AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
-      responseJSON ? Alert.alert("등록 완료!"):Alert.alert("서버로부터 당첨번호는 받아오지 못했습니다.")
+      responseJSON ? throwToast():Alert.alert("서버로부터 당첨번호는 받아오지 못했습니다.")
       navigation.goBack()
       
     } else {
@@ -89,13 +118,14 @@ export default function QrScan({navigation}:any){
         }
         // setFullData(tempObject)
         AsyncStorage.setItem('lotto',JSON.stringify(tempObject),()=>loadData())
-        Alert.alert("등록 완료")
+        throwToast()
         navigation.goBack()
         // console.log(tempObject)   
     }        
   }
 
   const dataFromQR = (data:any)=>{
+    console.log(data)
     let volume:any = "";
     let game: any = []
     let total:any = ''
@@ -120,6 +150,8 @@ export default function QrScan({navigation}:any){
   }
 
   const onSuccess = async (data:any) => {
+
+    
     setIsActivated(false)
     if(data.data.slice(0,24)!="http://m.dhlottery.co.kr"){
       throwAlert("올바른 QR을 입력해주세요.")  
@@ -130,6 +162,7 @@ export default function QrScan({navigation}:any){
       //내가 찍은 복권의 정보 가져오는 부분
       const [volume, game, total, dupleChecker] = dataFromQR(data)
       //이번 회차에 다른 복권이 이미 등록되어 있었을 경우
+
       if(fullData[volume]){
         
         if(!fullData[volume]['dupleChecker'].includes(dupleChecker)){

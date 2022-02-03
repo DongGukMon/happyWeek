@@ -3,10 +3,8 @@ import React,{useContext, useEffect} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   ImageBackground,
   Dimensions,
@@ -18,8 +16,10 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getStatusBarHeight } from "react-native-status-bar-height";
 
 import { StackContext } from '../utils/StackContext';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height > 700 ? Dimensions.get('screen').height : 800;
@@ -47,9 +47,10 @@ export default function Details(){
 
   //이거 테스트 한번 해봐야됨
   const isWinning = (winning:any,my:any) =>{
+    let myToNumber = my.map(Number)
     let count = 0
     let main = winning.slice(0,6)
-    my.map((item:any)=>{
+    myToNumber.map((item:any)=>{
       if(main.includes(item)){
         count = count + 1
       }
@@ -60,7 +61,7 @@ export default function Details(){
       case 4:
         return '#F2C643';
       case 5:
-        if(my.includes(winning[6])){
+        if(myToNumber.includes(winning[6])){
           return '#B8D75B';
         }else{
           return '#EE7A76';
@@ -103,9 +104,9 @@ export default function Details(){
     }else{
       return(
         <View style={{...styles.withoutWinningContainer}}>
-          <Text style={{...styles.withoutWinningStyle, paddingHorizontal:10}}>추첨 결과 다시 받아오기</Text>
-          <TouchableOpacity style={{height:screenHeight*0.06,width:screenHeight*0.06, backgroundColor:'tomato'}} onPress={()=>loadWinningData()}>
-
+          <Text style={{...styles.withoutWinningStyle, paddingHorizontal:10}}>추첨 번호 받아오기 </Text>
+          <TouchableOpacity style={{height:screenHeight*0.06,width:screenHeight*0.06,...styles.container}} onPress={()=>loadWinningData()}>
+            <Icon name="refresh" size={screenHeight*0.05} color="black" />
           </TouchableOpacity>
         </View>
     )}
@@ -113,17 +114,18 @@ export default function Details(){
 
  
   const rend_item = (item:any,index:any) =>{
-    let grade = isWinning(selectedData.winningNumber,item.item)
-    let condition = (grade =='#B8D75B') ? selectedData.winningNumber: selectedData.winningNumber.slice(0,6)
+
+    let grade = selectedData.winningNumber ? isWinning(selectedData.winningNumber,item.item) : "white"
+    let condition = selectedData.winningNumber && ((grade =='#B8D75B') ? selectedData.winningNumber: selectedData.winningNumber.slice(0,6))
 
     return (
-    <View key={index} style={{...styles.itemContainer, height: screenHeight <= 800 ? screenHeight*0.09 : screenHeight*0.1, backgroundColor:grade}}>
-      {item.item.map((myBall:any)=>{
-        return <View style={{...styles.lottoBallStyle,width:screenWidth*0.13,height:screenWidth*0.13,marginHorizontal:screenWidth*0.008, backgroundColor:condition.includes(Number(myBall)) ? returnBallColor(myBall):'rgb(250,250,250)'}}>
-          <Text style={{...styles.lottoNumber, color: condition.includes(Number(myBall)) ? 'white' : 'rgb(70,70,70)'}}>{myBall}</Text>
-        </View>
-      
-      })}
+      <View key={item.index} style={{...styles.itemContainer, height: screenHeight <= 800 ? screenHeight*0.09 : screenHeight*0.1, backgroundColor:grade}}>
+        {item.item.map((myBall:any)=>{
+          return <View style={{...styles.lottoBallStyle,width:screenWidth*0.13,height:screenWidth*0.13,marginHorizontal:screenWidth*0.008, backgroundColor:selectedData.winningNumber ? (condition.includes(Number(myBall)) ? returnBallColor(myBall):'rgb(250,250,250)') :'rgb(250,250,250)' }}>
+            <Text style={{...styles.lottoNumber, color: selectedData.winningNumber ? (condition.includes(Number(myBall)) ? 'white' : 'rgb(70,70,70)'):'rgb(70,70,70)'}}>{myBall}</Text>
+          </View>
+        
+        })}
     </View>)
   }
 
@@ -153,13 +155,13 @@ export default function Details(){
       }
       </View>
 
-      <View style={{...styles.myContainer, height:screenHeight*0.78, marginTop: screenHeight*0.05}}>
+      <View style={{...styles.myContainer, flex:(Platform.OS==='android' || screenHeight == 800) ? 1 :0, height:Dimensions.get('screen').height * 0.72 - getStatusBarHeight(), marginTop: screenHeight*0.05}}>
         <FlatList
          data={selectedData.game}
          // data={testArr}
          renderItem={rend_item}
         //  keyExtractor={(index:any) => index}
-         contentContainerStyle={{paddingHorizontal:15,paddingVertical:15}}
+         contentContainerStyle={{paddingHorizontal:15,paddingVertical:20}}
          />
       </View>
 
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     justifyContent:'center'
   },
   lottoBallStyle:{
-    borderRadius:30, 
+    borderRadius:100, 
     justifyContent:'center', 
     alignItems:'center',
     shadowColor: "rgb(50, 50, 50)",

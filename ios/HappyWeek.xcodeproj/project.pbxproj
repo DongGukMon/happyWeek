@@ -11,6 +11,7 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		15DB594A279EECA300B5F978 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 15DB5949279EECA300B5F978 /* GoogleService-Info.plist */; };
 		6172F2D35A4C3AA820D92908 /* libPods-HappyWeek.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6423831EA8574132BED9D8CC /* libPods-HappyWeek.a */; };
 		7EF68E3733C33B6898317E18 /* libPods-HappyWeek-HappyWeekTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-HappyWeek-HappyWeekTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
@@ -38,6 +39,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = HappyWeek/main.m; sourceTree = "<group>"; };
 		154C0CD5279E52AA0075AAEB /* HappyWeekRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HappyWeekRelease.entitlements; path = HappyWeek/HappyWeekRelease.entitlements; sourceTree = "<group>"; };
 		154C0CD6279E52CD0075AAEB /* HappyWeek.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = HappyWeek.entitlements; path = HappyWeek/HappyWeek.entitlements; sourceTree = "<group>"; };
+		15DB5949279EECA300B5F978 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		1D0AE47A65C8663E3B452821 /* Pods-HappyWeek-HappyWeekTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HappyWeek-HappyWeekTests.release.xcconfig"; path = "Target Support Files/Pods-HappyWeek-HappyWeekTests/Pods-HappyWeek-HappyWeekTests.release.xcconfig"; sourceTree = "<group>"; };
 		6423831EA8574132BED9D8CC /* libPods-HappyWeek.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HappyWeek.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-HappyWeek-HappyWeekTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HappyWeek-HappyWeekTests.debug.xcconfig"; path = "Target Support Files/Pods-HappyWeek-HappyWeekTests/Pods-HappyWeek-HappyWeekTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		13B07FAE1A68108700A75B9A /* HappyWeek */ = {
 			isa = PBXGroup;
 			children = (
+				15DB5949279EECA300B5F978 /* GoogleService-Info.plist */,
 				154C0CD6279E52CD0075AAEB /* HappyWeek.entitlements */,
 				154C0CD5279E52AA0075AAEB /* HappyWeekRelease.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -248,6 +251,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				15DB594A279EECA300B5F978 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,7 +492,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HappyWeek/HappyWeek.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 7P6594JX3Y;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = HappyWeek/Info.plist;
@@ -496,6 +500,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -516,13 +521,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HappyWeek/HappyWeekRelease.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 8;
 				DEVELOPMENT_TEAM = 7P6594JX3Y;
 				INFOPLIST_FILE = HappyWeek/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
